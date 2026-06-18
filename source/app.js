@@ -1,7 +1,7 @@
 // import React from 'react';
 // import {Text} from 'ink';
 import React, {useState, useEffect} from 'react';
-import {render, Text} from 'ink';
+import {render, Box, Text} from 'ink';
 const Counter = () => {
 	const [counter, setCounter] = useState(0);
 
@@ -32,6 +32,16 @@ export default function App({name = 'Stranger'}) {
 			<Text backgroundColor="rgb(232, 131, 136)" color="white">
 				Red
 			</Text>
+			<Text color="red" bold italic underline strikethrough inverse>
+				Dimmed Red
+			</Text>
+			<Box margin={2} borderStyle="single" borderColor="cyan">
+				<Text>This is a box with margin</Text>
+			</Box>
+			<Box paddingTop={2} borderColor="cyan" borderStyle="single">
+				<Text>Top</Text>
+			</Box>
+
 			<Counter />
 		</>
 	);
