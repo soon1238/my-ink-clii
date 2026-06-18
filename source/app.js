@@ -2,6 +2,9 @@
 // import {Text} from 'ink';
 import React, {useState, useEffect} from 'react';
 import {render, Box, Text} from 'ink';
+import SelectInput from 'ink-select-input';
+import {exec} from 'child_process';
+
 const Counter = () => {
 	const [counter, setCounter] = useState(0);
 
@@ -15,6 +18,52 @@ const Counter = () => {
 		};
 	}, []);
 	return <Text color="green">{counter} tests passed</Text>;
+};
+
+const DesktopLauncher = () => {
+	const [status, setStatus] = useState('Select an app to launch...');
+
+	const handleSelect = item => {
+		setStatus(`Attempting to open ${item.label}...`);
+
+		// Fire the command to the operating system
+		exec(item.value, error => {
+			if (error) {
+				setStatus(`❌ Error opening ${item.label}: ${error.message}`);
+			} else {
+				setStatus(`✅ Launched ${item.label}!`);
+			}
+		});
+	};
+
+	// The 'value' contains the actual OS-level command
+	const apps = [
+		{label: '🌐 Open Browser to Google', value: 'start https://google.com'},
+		{label: '📝 Launch Microsoft Word', value: 'start winword'},
+		{label: '📊 Launch Excel', value: 'start excel'},
+		{label: '📁 Open Current Folder in Explorer', value: 'start .'},
+	];
+
+	return (
+		<Box
+			flexDirection="column"
+			margin={1}
+			borderStyle="round"
+			borderColor="green"
+		>
+			<Box marginBottom={1}>
+				<Text color="green" bold>
+					🖥️ Desktop App Launcher
+				</Text>
+			</Box>
+
+			<SelectInput items={apps} onSelect={handleSelect} />
+
+			<Box marginTop={1} paddingX={1}>
+				<Text color="gray">{status}</Text>
+			</Box>
+		</Box>
+	);
 };
 export default function App({name = 'Stranger'}) {
 	return (
@@ -43,6 +92,7 @@ export default function App({name = 'Stranger'}) {
 			</Box>
 
 			<Counter />
+			<DesktopLauncher />
 		</>
 	);
 }
